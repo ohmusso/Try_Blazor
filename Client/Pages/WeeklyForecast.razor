@@ -1,0 +1,27 @@
+@page "/weeklyforecast"
+
+<h3>WeeklyForecast</h3>
+@if (forecasts == null){
+    <p><em>Loading...</em></p>
+}
+else{
+    <div class="d-flex">
+        @foreach( var forcast in forecasts){
+            <WeatherDay
+                TemperatureC = "forcast.TemperatureC"
+                Summary = "@forcast.Summary"
+                DayOfWeek = "forcast.Date.DayOfWeek"
+                OnSelected = "HandleItemSelected"
+                Selected = "forcast.Selected"
+            >
+                <CustomMessage>
+                    @if( forcast.Summary == "Rainy"){
+                        <div class="alert alert-danger">
+                            Torrnado Warning!
+                        </div>
+                    }
+                </CustomMessage>
+            </WeatherDay>
+        }
+    </div>
+}

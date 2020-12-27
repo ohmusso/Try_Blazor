@@ -1,3 +1,5 @@
+@inject IJSRuntime js
+
 @inherits LayoutComponentBase
 
 <div class="page">
@@ -6,8 +8,9 @@
     </div>
 
     <div class="main">
-        <div class="top-row px-4">
-            <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+        <div class="alert alert-info my-2">
+        Click here to switch themes
+            <button @onclick="SwapTheme">@SetThemeName Mode</button>
         </div>
 
         <div class="content px-4">
@@ -15,3 +18,13 @@
         </div>
     </div>
 </div>
+
+@code {
+    bool isDark = false;
+    string SetThemeName => isDark ? "app-dark" : "app";
+    async Task SwapTheme()
+    {
+        isDark = !isDark;
+        await js.InvokeVoidAsync("themeChooser.setTheme", SetThemeName);
+    }
+}

@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
+using Try_Blazor.RazorClassLib;
+
 namespace Try_Blazor.Client
 {
     public class Program
@@ -18,6 +20,9 @@ namespace Try_Blazor.Client
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+            /* Razor Class Library */
+            builder.Services.AddSingleton<ExampleJsInterop>();
 
             await builder.Build().RunAsync();
         }
