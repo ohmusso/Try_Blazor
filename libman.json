@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "bootstrap@latest",
+      "destination": "Client\\Themes\\bootstrap",
+      "files": [
+        "scss/*",
+        "scss/*/*"
+      ]
+    }
+  ]
+}
