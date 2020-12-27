@@ -6,6 +6,7 @@
 	],
 	"settings": {
 		"terminal.integrated.cwd": ".",
-		"editor.codeLens": false
+		"editor.codeLens": false,
+		"diffEditor.codeLens": false
 	}
 }

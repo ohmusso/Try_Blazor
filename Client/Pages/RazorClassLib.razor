@@ -1,0 +1,14 @@
+@page "/razorclasslib"
+@inject ExampleJsInterop jsinterop
+
+<h1>Hello, @message</h1>
+
+<Component1></Component1>
+<button @onclick="ShowPromt">Show Prompt</button>
+
+@code{
+    string message = "world";
+    async Task ShowPromt(){
+        message = await jsinterop.Prompt("Say Hellow");
+    }
+}

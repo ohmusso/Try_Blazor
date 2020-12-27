@@ -1,7 +1,80 @@
-﻿@page "/"
+﻿@inject IJSRuntime js
+@page "/"
 
-<h1>Hello, world!</h1>
+<ul class="list-group">
+    @foreach (var item in items){
+    <li @key="item.Id" class="list-group-item">
+    <h1>@item.Value</h1>
+    <input type="checkbox" />
+    </li>
+    }
+</ul>
+<button @onclick="_ => items = items.Reverse()">Reverse</button>
 
-Welcome to your new app.
+@if( hasGeolocation ){
+    <p>Browser has Geolocation</p>
+}
+
+@if( position != null){
+    <p>Current Position: @position.coords.latitude lat
+        @position.coords.longitude long
+    </p>
+    <p>Position reported at @position.timestamp</p>
+}
+
+@switch(error){
+    case PositionError.PERMISSION_DENIED:
+        <p>Geolocation Permission Denied</p>
+        break;
+    case PositionError.POSITION_UNAVAILABLE:
+        <p>Georocation Position Unavailable</p>
+        break;
+    case PositionError.TIMEOUT:
+        <p>Geolocation Timeout</p>
+        break;
+    default:
+        break;
+}
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+@code{
+    bool hasGeolocation;
+    Position position;
+    PositionError error;
+
+    void OnSuccess(Position p){
+        position = p;
+        StateHasChanged();
+    }
+    void OnError(PositionError e){
+        error = e;
+        StateHasChanged();
+    }
+
+    public class Color {
+        public int Id { get; set; }
+        public string Value { get; set; }
+    }
+    IEnumerable<Color> items = new Color[] {
+        new Color {Id = 0, Value = "Green" },
+        new Color {Id = 1, Value = "Blue" },
+        new Color {Id = 2, Value = "Orange" },
+        new Color {Id = 3, Value = "Purple" }
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender){
+        if( firstRender ){
+            var geo = new Geolocation(js);
+            hasGeolocation = await geo.HasGeolocation();
+            StateHasChanged();
+ 
+            var options = new PositionOptions() {
+                EnableHighAccuracy = false,
+                Timeout = 2000,
+                MaximumAge = 0
+            };
+            await geo.GetCurrentPosition(OnSuccess, OnError, options);
+        }
+    }
+}
